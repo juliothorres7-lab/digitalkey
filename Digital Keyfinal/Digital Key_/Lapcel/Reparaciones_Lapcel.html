@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicio Técnico y Reparaciones | Lapcel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        dark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+        .hero-text-shadow {
+            text-shadow: 0 4px 8px rgba(0,0,0,0.5);
+        }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            z-index: 100;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+            animation: none;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .whatsapp-badge {
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            background: #ff3b3b;
+            color: white;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navbar con indicador de sección -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2">
+                    <a href="../Lapcel.html" class="group flex items-center justify-center w-10 h-10 rounded-full bg-slate-900 text-white hover:bg-brand-600 transition-all" title="Volver a Lapcel">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                    </a>
+                    <div class="h-8 w-px bg-slate-600 hidden sm:block"></div>
+                    <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-full cursor-pointer group hover:bg-brand-600 transition-all" onclick="window.location.href='../Lapcel.html'">
+                        <img src="../Imagenes/Lapcel Logo.jpg" alt="Logo Lapcel" class="h-8 w-auto object-contain rounded">
+                        <span class="font-bold text-xl tracking-tight text-white">Lapcel</span>
+                    </div>
+                    <div class="hidden sm:flex items-center gap-1">
+                        <span class="text-slate-500 text-sm mx-1">/</span>
+                        <span class="text-white text-sm font-semibold bg-slate-800/50 px-3 py-1 rounded-full">Reparaciones</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="#proceso" class="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-brand-600 transition-all shadow-sm">Proceso</a>
+                    <a href="#precios-celulares" class="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-brand-600 transition-all shadow-sm">Precios Celulares</a>
+                    <a href="#precios-pc" class="bg-slate-900 text-white px-4 py-2 rounded-full text-sm font-bold hover:bg-brand-600 transition-all shadow-sm">Precios PC</a>
+                    <a href="#contacto" class="bg-slate-900 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-brand-600 transition-all shadow-lg">
+                        Agendar Cita
+                    </a>
+                    <a href="javascript:void(0)" onclick="abrirWhatsApp()" class="relative group flex items-center gap-1 px-3 py-1 bg-green-600/20 border border-green-500/30 rounded-full hover:bg-green-600/30 transition-all">
+                        <i class="fa-brands fa-whatsapp text-green-400 text-xl"></i>
+                        <span class="text-xs text-green-400 hidden lg:inline">WhatsApp</span>
+                        <span class="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-ping"></span>
+                        <span class="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full"></span>
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden bg-slate-900 text-white p-2 rounded-full hover:bg-brand-600 transition-all">
+                    <i class="fa-solid fa-bars-staggered text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900 border-t border-slate-700 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="../Lapcel.html" class="block px-4 py-3 mb-2 rounded-lg bg-slate-800 text-white font-bold text-sm border border-slate-700 hover:bg-brand-600 transition-all">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Volver a Lapcel
+                </a>
+                <a href="#proceso" class="block px-4 py-3 rounded-lg text-white font-bold hover:bg-brand-600">Proceso</a>
+                <a href="#precios-celulares" class="block px-4 py-3 rounded-lg text-white font-bold hover:bg-brand-600">Precios Celulares</a>
+                <a href="#precios-pc" class="block px-4 py-3 rounded-lg text-white font-bold hover:bg-brand-600">Precios PC</a>
+                <a href="#contacto" class="block px-4 py-3 rounded-lg text-white font-bold hover:bg-brand-600">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section con badge mejorado -->
+    <header id="inicio" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden" style="background: linear-gradient(135deg, #0a0f1e 0%, #1a2639 100%);">
+        <div class="hero-overlay"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0 pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-brand-500 rounded-full mix-blend-overlay filter blur-[128px] opacity-30"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-500 rounded-full mix-blend-overlay filter blur-[128px] opacity-30"></div>
+        </div>
+
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="text-center lg:text-left">
+                <!-- Badge más visible -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/70 border border-white/50 text-white text-sm font-bold uppercase tracking-wider mb-6 backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                    Reparaciones Express
+                </div>
+                <h1 class="text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6 hero-text-shadow">
+                    Devuélvele la vida a tus <br>
+                    <span class="text-gradient">dispositivos favoritos.</span>
+                </h1>
+                <p class="text-lg text-white/90 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-medium drop-shadow-md">
+                    Reparaciones express, refacciones de calidad y garantía por escrito. 
+                    No dejes que una pantalla rota o una batería vieja te detenga.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#precios-celulares" class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-brand-600 transition-all shadow-lg hover:shadow-brand-500/25 hover-lift">
+                        Ver Costos Estimados
+                    </a>
+                    <div class="flex items-center gap-2 text-slate-300 px-4 py-3">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <span class="text-sm font-medium">4.8/5 en Reseñas</span>
+                    </div>
+                </div>
+            </div>
+            <div class="relative lg:h-[500px] flex items-center justify-center">
+                <div class="relative w-full max-w-md aspect-square">
+                    <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Reparación Técnica" 
+                         class="rounded-3xl shadow-2xl border-4 border-white/20 transform rotate-[-6deg] hover:rotate-0 transition-transform duration-700 z-10 relative object-cover w-full h-full">
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl z-20 animate-bounce" style="animation-duration: 3s;">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-green-100 p-2 rounded-lg text-green-600">
+                                <i class="fa-regular fa-calendar-check"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Reparaciones desde</p>
+                                <p class="text-sm font-bold text-slate-900">el mismo día</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de marcas (chips estilo Lapcel, solo nombres) -->
+    <div class="bg-gray-200 py-12 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="text-center text-sm font-bold text-gray-800 mb-8 uppercase tracking-widest">Reparamos todas las marcas</p>
+            <div class="flex flex-wrap justify-center items-center gap-4 md:gap-8">
+                <span class="px-4 py-2 bg-slate-200 text-slate-800 font-bold rounded-full shadow-sm hover:bg-brand-600 hover:text-white transition-colors cursor-default">Apple</span>
+                <span class="px-4 py-2 bg-slate-200 text-slate-800 font-bold rounded-full shadow-sm hover:bg-brand-600 hover:text-white transition-colors cursor-default">Samsung</span>
+                <span class="px-4 py-2 bg-slate-200 text-slate-800 font-bold rounded-full shadow-sm hover:bg-brand-600 hover:text-white transition-colors cursor-default">Xiaomi</span>
+                <span class="px-4 py-2 bg-slate-200 text-slate-800 font-bold rounded-full shadow-sm hover:bg-brand-600 hover:text-white transition-colors cursor-default">Motorola</span>
+                <span class="px-4 py-2 bg-slate-200 text-slate-800 font-bold rounded-full shadow-sm hover:bg-brand-600 hover:text-white transition-colors cursor-default">Lenovo</span>
+                <span class="px-4 py-2 bg-slate-200 text-slate-800 font-bold rounded-full shadow-sm hover:bg-brand-600 hover:text-white transition-colors cursor-default">HP</span>
+                <span class="px-4 py-2 bg-slate-200 text-slate-800 font-bold rounded-full shadow-sm hover:bg-brand-600 hover:text-white transition-colors cursor-default">Dell</span>
+                <span class="text-sm font-bold text-slate-600 bg-slate-200 px-4 py-2 rounded-full shadow-sm">y más...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proceso (tarjetas estilo Lapcel) -->
+    <section id="proceso" class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">¿Cómo trabajamos?</h2>
+                <p class="text-slate-500 mt-2">Tu tranquilidad es nuestra prioridad.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-all text-center group hover-lift">
+                    <div class="w-16 h-16 bg-brand-100 text-brand-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                        <i class="fa-solid fa-microscope"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-slate-900">1. Diagnóstico Gratuito</h3>
+                    <p class="text-slate-500 text-sm">Revisamos tu equipo sin costo para identificar la falla exacta.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-all text-center group hover-lift">
+                    <div class="w-16 h-16 bg-brand-100 text-brand-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                        <i class="fa-solid fa-tools"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-slate-900">2. Reparación Profesional</h3>
+                    <p class="text-slate-500 text-sm">Usamos herramientas de precisión y refacciones de alta calidad.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-all text-center group hover-lift">
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-slate-900">3. Garantía Extendida</h3>
+                    <p class="text-slate-600 text-sm">Hasta 30 días de garantía directa en mano de obra y piezas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Precios Celulares (sin cambios) -->
+    <section id="precios-celulares" class="py-20 px-4 max-w-7xl mx-auto">
+        <div class="flex items-center gap-4 mb-10">
+            <div class="w-12 h-12 bg-slate-900 rounded-xl flex items-center justify-center text-white text-xl shadow-lg">
+                <i class="fa-solid fa-mobile-button"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900">Reparación de Celulares</h2>
+                <p class="text-slate-500 text-sm">Precios estimados sujetos a modelo y disponibilidad.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-brand-200 transition-all group hover-lift">
+                <div class="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-mobile-screen-button text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Cambio de Pantalla</h3>
+                <p class="text-slate-500 text-xs mb-4 mt-2">Cristal roto, manchas o touch que no responde.</p>
+                <div class="border-t border-gray-100 pt-4">
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$899 <span class="text-sm text-gray-400 font-normal">MXN</span></p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-brand-200 transition-all group hover-lift">
+                <div class="w-12 h-12 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-battery-half text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Cambio de Batería</h3>
+                <p class="text-slate-500 text-xs mb-4 mt-2">Se descarga rápido, se apaga solo o se calienta.</p>
+                <div class="border-t border-gray-100 pt-4">
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$499 <span class="text-sm text-gray-400 font-normal">MXN</span></p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-brand-200 transition-all group hover-lift">
+                <div class="w-12 h-12 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-plug text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Centro de Carga</h3>
+                <p class="text-slate-500 text-xs mb-4 mt-2">No carga, carga lento o hay que mover el cable.</p>
+                <div class="border-t border-gray-100 pt-4">
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$350 <span class="text-sm text-gray-400 font-normal">MXN</span></p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:border-brand-200 transition-all group hover-lift">
+                <div class="w-12 h-12 bg-purple-100 text-purple-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <i class="fa-brands fa-android text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Software y Desbloqueo</h3>
+                <p class="text-slate-500 text-xs mb-4 mt-2">Cuenta Google, se queda en el logo, lento.</p>
+                <div class="border-t border-gray-100 pt-4">
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-wider">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$300 <span class="text-sm text-gray-400 font-normal">MXN</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Precios Computadoras (sin cambios) -->
+    <section id="precios-pc" class="py-20 px-4 max-w-7xl mx-auto bg-gray-100 rounded-3xl mb-10">
+        <div class="flex items-center gap-4 mb-10">
+            <div class="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center text-white text-xl shadow-lg">
+                <i class="fa-solid fa-laptop-medical"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900">Reparación de Computadoras</h2>
+                <p class="text-slate-500 text-sm">Laptops y Equipos de Escritorio.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-brand-500 flex justify-between items-center hover:shadow-md transition-all hover-lift">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900">Mantenimiento Preventivo</h3>
+                    <p class="text-sm text-slate-500 mt-1">Limpieza interna + Pasta Térmica</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$450</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-brand-500 flex justify-between items-center hover:shadow-md transition-all hover-lift">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900">Formateo e Instalación</h3>
+                    <p class="text-sm text-slate-500 mt-1">Windows/Mac + Office + Drivers</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$500</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-brand-500 flex justify-between items-center hover:shadow-md transition-all hover-lift">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900">SSD + RAM Upgrade</h3>
+                    <p class="text-sm text-slate-500 mt-1">Mano de obra (Hardware aparte)</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$350</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-brand-500 flex justify-between items-center hover:shadow-md transition-all hover-lift">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900">Cambio de Teclado</h3>
+                    <p class="text-sm text-slate-500 mt-1">Reemplazo físico por daño</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$600</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-brand-500 flex justify-between items-center hover:shadow-md transition-all hover-lift">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900">Reparación de Bisagras</h3>
+                    <p class="text-sm text-slate-500 mt-1">Reconstrucción de carcasa</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$750</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border-l-4 border-brand-500 flex justify-between items-center hover:shadow-md transition-all hover-lift">
+                <div>
+                    <h3 class="font-bold text-lg text-slate-900">Eliminación de Virus</h3>
+                    <p class="text-sm text-slate-500 mt-1">Limpieza profunda de sistema</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-slate-400 font-bold uppercase">Desde</p>
+                    <p class="text-2xl font-bold text-brand-600">$400</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto (con WhatsApp integrado) -->
+    <section id="contacto" class="relative py-20 bg-slate-900 overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-10"></div>
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">¿Tu equipo no aparece en la lista?</h2>
+            <p class="text-slate-300 text-lg mb-8">
+                Cada dispositivo es diferente. Envíanos una foto del problema o el modelo de tu equipo y te damos un presupuesto exacto en minutos.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="javascript:void(0)" onclick="abrirWhatsApp('Cotización reparación')" class="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-900/30 hover-lift">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i> Cotizar por WhatsApp
+                </a>
+                <a href="tel:+524611113753" class="bg-slate-700 hover:bg-slate-600 text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 border border-slate-600 hover-lift">
+                    <i class="fa-solid fa-phone"></i> Llamar Ahora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (idéntico a Lapcel.html) -->
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="../Imagenes/Lapcel Logo.jpg" alt="Lapcel" class="h-8 w-auto object-contain rounded">
+                        <span class="font-bold text-white text-lg">Lapcel</span>
+                    </div>
+                    <p class="text-sm text-slate-400">Tecnología de calidad con garantía y atención cercana.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Enlaces</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../Lapcel.html#inicio" class="hover:text-white transition">Inicio</a></li>
+                        <li><a href="../Lapcel.html#catalogo" class="hover:text-white transition">Catálogo</a></li>
+                        <li><a href="#proceso" class="hover:text-white transition">Reparaciones</a></li>
+                        <li><a href="#contacto" class="hover:text-white transition">Contacto</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Contacto</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><i class="fa-brands fa-whatsapp mr-2 text-green-400"></i> +52 461 111 3753</li>
+                        <li><i class="fa-regular fa-envelope mr-2"></i> contacto@lapcel.mx</li>
+                        <li><i class="fa-regular fa-clock mr-2"></i> Lun-Sáb 10am - 8pm</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4">Síguenos</h4>
+                    <div class="flex gap-4">
+                        <a href="https://www.facebook.com/share/1WAmUHN1QE/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/lapcel.mx?igsh=bWZlYmcxbDd6ZDlj" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="javascript:void(0)" onclick="abrirWhatsApp()" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-green-600 hover:text-white transition-all">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 text-center text-sm">
+                <p>© 2025 Lapcel. Todos los derechos reservados. Diseñado por Digital Key.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón flotante de WhatsApp -->
+    <div class="whatsapp-float" onclick="abrirWhatsApp()">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-badge">Chatea</span>
+    </div>
+
+    <script>
+        const WHATSAPP_NUMBER = '524611113753';
+
+        function abrirWhatsApp(motivo = 'general') {
+            let mensaje = 'Hola, vengo de la página de reparaciones de Lapcel. Me interesa cotizar un servicio técnico.';
+            if (motivo === 'Cotización reparación') {
+                mensaje = 'Hola, vengo de la página de reparaciones de Lapcel. Me gustaría cotizar la reparación de mi equipo.';
+            }
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        }
+
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('glass-nav', 'shadow-sm');
+            } else {
+                nav.classList.remove('glass-nav', 'shadow-sm');
+            }
+        });
+    </script>
+</body>
+</html>

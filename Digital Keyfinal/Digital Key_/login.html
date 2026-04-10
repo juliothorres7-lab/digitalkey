@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Key - Acceso Clientes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .login-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+        .login-background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.25) blur(3px);
+        }
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(0, 60, 70, 0.7), rgba(0, 140, 150, 0.6));
+        }
+        .form-transition {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .form-hidden {
+            opacity: 0;
+            transform: translateX(20px);
+            pointer-events: none;
+            position: absolute;
+            width: 100%;
+        }
+        .form-visible {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+            position: relative;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            max-width: 400px;
+            width: 100%;
+        }
+        .input-error {
+            border-color: #ef4444 !important;
+        }
+        .input-success {
+            border-color: #22d3ee !important;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .error-message.visible {
+            display: block;
+        }
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 16px;
+            z-index: 10;
+        }
+        .social-btn {
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            width: 100%;
+        }
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+        }
+        input:focus, button:focus {
+            outline: 2px solid #22d3ee;
+            outline-offset: 2px;
+        }
+        .relative .fa-eye, .relative .fa-eye-slash {
+            right: 12px;
+            left: auto;
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-left: 4px solid #22d3ee;
+        }
+
+        /* Estilos para los campos (fondo claro, texto negro) */
+        input, textarea, select {
+            background-color: #f9fafb !important;
+            color: #111827 !important;
+            border-color: #d1d5db !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af !important;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #22d3ee !important;
+            outline: none;
+        }
+        /* Ajuste de etiquetas */
+        label, .text-slate-400, .text-slate-300, .text-white, .text-slate-500 {
+            color: #f1f5f9 !important;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <div class="login-background">
+        <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1600" alt="fondo">
+        <div class="overlay"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div class="glass rounded-2xl px-6 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                    <img src="Imagenes/Digital_Key_Sin_Slogan.png" alt="Digital Key" class="h-10 w-auto object-contain drop-shadow-xl hover:scale-105 transition-transform">
+                    <span class="font-display font-bold text-white hidden sm:inline">Digital Key</span>
+                </div>
+                <a href="index.html" class="text-sm text-white/80 hover:text-aqua-400 transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al inicio
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex-1 flex items-center justify-center p-4 mt-20">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-6">
+                <img src="Imagenes/Digital_Key.png" alt="Digital Key" class="h-16 mx-auto mb-3 object-contain drop-shadow-2xl hover:scale-105 transition-transform">
+                <h1 class="font-display text-3xl font-bold text-white">Bienvenido</h1>
+                <p class="text-slate-300">Accede a tu panel de cliente</p>
+            </div>
+
+            <div class="glass rounded-3xl p-8 relative overflow-hidden border border-aqua-500/20 shadow-2xl shadow-aqua-500/10">
+                <div class="flex border-b border-white/10 mb-6">
+                    <button id="tab-register" class="flex-1 pb-3 text-sm font-bold text-white border-b-2 border-aqua-500 transition-colors">Registrarse</button>
+                    <button id="tab-login" class="flex-1 pb-3 text-sm font-bold text-slate-400 hover:text-white transition-colors">Iniciar sesión</button>
+                </div>
+
+                <div class="relative min-h-[450px]">
+                    <!-- Login form (oculto inicialmente) -->
+                    <div id="loginFormContainer" class="form-transition form-hidden">
+                        <form id="loginForm" class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Correo electrónico</label>
+                                <div class="relative">
+                                    <i class="fa-regular fa-envelope input-icon"></i>
+                                    <input type="email" id="loginEmail" class="w-full border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="tu@email.com" required>
+                                </div>
+                                <div id="loginEmailError" class="error-message">Correo no válido</div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Contraseña</label>
+                                <div class="relative">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" id="loginPassword" class="w-full border border-white/10 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="••••••••" required>
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white" onclick="togglePassword('loginPassword', this)">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div id="loginPasswordError" class="error-message">Mínimo 6 caracteres</div>
+                            </div>
+
+                            <div class="flex justify-between items-center text-sm">
+                                <label class="flex items-center gap-2 text-slate-400">
+                                    <input type="checkbox" id="rememberMe" class="rounded bg-dark-bg border-white/10 text-aqua-500 focus:ring-aqua-500">
+                                    Recordar sesión
+                                </label>
+                                <a href="#" id="forgotPasswordBtn" class="text-aqua-400 hover:underline">¿Olvidaste tu contraseña?</a>
+                            </div>
+
+                            <button type="submit" id="loginSubmitBtn" class="w-full bg-gradient-to-r from-aqua-500 to-blue-600 text-white font-bold py-3 rounded-xl hover:shadow-lg hover:shadow-aqua-500/30 transition-all transform hover:-translate-y-1">
+                                Entrar
+                            </button>
+                            <p id="resultadoLogin" class="text-sm text-center mt-2"></p>
+                        </form>
+
+                        <div class="relative my-6">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-white/10"></div>
+                            </div>
+                            <div class="relative flex justify-center text-xs">
+                                <span class="px-2 bg-dark-bg text-slate-400">O continúa con</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <a href="https://web.facebook.com/profile.php?id=61579252795826&locale=es_LA" target="_blank" class="social-btn bg-[#1877f2] hover:bg-[#166fe5] text-white">
+                                <i class="fa-brands fa-facebook-f"></i> Facebook
+                            </a>
+                            <a href="https://www.instagram.com/_digital_key_?igsh=MXdwaXdzZWw5a3ZwOA==" target="_blank" class="social-btn bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white">
+                                <i class="fa-brands fa-instagram"></i> Instagram
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Registro form (visible inicialmente) -->
+                    <div id="registerFormContainer" class="form-transition form-visible">
+                        <form id="registerForm" class="space-y-5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Nombre completo</label>
+                                <div class="relative">
+                                    <i class="fa-regular fa-user input-icon"></i>
+                                    <input type="text" id="nombre" class="w-full border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="Tu nombre" required>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Correo electrónico</label>
+                                <div class="relative">
+                                    <i class="fa-regular fa-envelope input-icon"></i>
+                                    <input type="email" id="regEmail" class="w-full border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="tu@email.com" required>
+                                </div>
+                                <div id="regEmailError" class="error-message">Correo no válido</div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Contraseña</label>
+                                <div class="relative">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" id="regPassword" class="w-full border border-white/10 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="••••••••" required>
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white" onclick="togglePassword('regPassword', this)">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div id="regPasswordError" class="error-message">Mínimo 6 caracteres</div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Confirmar contraseña</label>
+                                <div class="relative">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" id="confirmar" class="w-full border border-white/10 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="••••••••" required>
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white" onclick="togglePassword('confirmar', this)">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div id="confirmError" class="error-message">Las contraseñas no coinciden</div>
+                            </div>
+
+                            <div class="flex items-start gap-2 mt-2">
+                                <input type="checkbox" id="acceptTerms" class="mt-1 rounded bg-dark-bg border-white/10 text-aqua-500 focus:ring-aqua-500" required>
+                                <label for="acceptTerms" class="text-xs text-slate-400">
+                                    He leído y acepto los 
+                                    <a href="#" id="showTermsBtn" class="text-aqua-400 hover:underline">Términos y Condiciones</a>.
+                                </label>
+                            </div>
+
+                            <button type="submit" id="registerSubmitBtn" class="w-full bg-gradient-to-r from-aqua-500 to-blue-600 text-white font-bold py-3 rounded-xl hover:shadow-lg hover:shadow-aqua-500/30 transition-all transform hover:-translate-y-1">
+                                Registrarme
+                            </button>
+                            <p id="resultadoRegistro" class="text-sm text-center mt-2"></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de recuperación -->
+    <div id="forgotModal" class="modal">
+        <div class="modal-content glass rounded-2xl p-6">
+            <h3 class="font-display text-xl font-bold text-white mb-4">Recuperar contraseña</h3>
+            <p class="text-sm text-slate-400 mb-4">Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.</p>
+            <div class="relative">
+                <i class="fa-regular fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                <input type="email" id="resetEmail" class="w-full bg-dark-bg border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:border-aqua-500 transition-colors mb-4" placeholder="tu@email.com">
+            </div>
+            <div class="flex gap-2">
+                <button id="sendResetBtn" class="flex-1 bg-aqua-500 text-white py-2 rounded-lg hover:bg-aqua-400 transition">Enviar</button>
+                <button id="closeModalBtn" class="flex-1 bg-white/10 text-white py-2 rounded-lg hover:bg-white/20 transition">Cancelar</button>
+            </div>
+            <p id="resetMessage" class="text-xs text-center mt-2"></p>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        (function() {
+            emailjs.init("TU_USER_ID"); // Reemplaza con tu User ID de EmailJS
+        })();
+
+        function mostrarToast(mensaje, tipo = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.innerHTML = `<i class="fa-solid fa-${tipo === 'success' ? 'circle-check' : 'circle-exclamation'} text-${tipo === 'success' ? 'green' : 'red'}-400"></i> ${mensaje}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        async function enviarCorreoConfirmacion(nombre, email) {
+            const templateParams = {
+                to_name: nombre,
+                to_email: email,
+                from_name: 'Digital Key',
+                message: `¡Gracias por registrarte en Digital Key, ${nombre}! Tu cuenta ha sido creada exitosamente. Ahora puedes iniciar sesión y acceder a tu panel de cliente.`,
+                subject: 'Confirmación de registro - Digital Key'
+            };
+            try {
+                await emailjs.send('service_xxxxx', 'template_xxxxx', templateParams);
+                console.log('Correo enviado');
+            } catch (error) {
+                console.error('Error al enviar correo:', error);
+                mostrarToast('Error al enviar correo de confirmación', 'error');
+            }
+        }
+
+        // Elementos
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+        const loginContainer = document.getElementById('loginFormContainer');
+        const registerContainer = document.getElementById('registerFormContainer');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const forgotBtn = document.getElementById('forgotPasswordBtn');
+        const forgotModal = document.getElementById('forgotModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const sendResetBtn = document.getElementById('sendResetBtn');
+        const resetMessage = document.getElementById('resetMessage');
+
+        // Tabs
+        tabLogin.addEventListener('click', () => {
+            tabLogin.classList.add('text-white', 'border-aqua-500');
+            tabLogin.classList.remove('text-slate-400');
+            tabRegister.classList.remove('text-white', 'border-aqua-500');
+            tabRegister.classList.add('text-slate-400');
+            loginContainer.classList.remove('form-hidden');
+            loginContainer.classList.add('form-visible');
+            registerContainer.classList.remove('form-visible');
+            registerContainer.classList.add('form-hidden');
+        });
+
+        tabRegister.addEventListener('click', () => {
+            tabRegister.classList.add('text-white', 'border-aqua-500');
+            tabRegister.classList.remove('text-slate-400');
+            tabLogin.classList.remove('text-white', 'border-aqua-500');
+            tabLogin.classList.add('text-slate-400');
+            registerContainer.classList.remove('form-hidden');
+            registerContainer.classList.add('form-visible');
+            loginContainer.classList.remove('form-visible');
+            loginContainer.classList.add('form-hidden');
+        });
+
+        window.togglePassword = function(fieldId, btn) {
+            const field = document.getElementById(fieldId);
+            const icon = btn.querySelector('i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        };
+
+        // Validaciones (login)
+        const loginEmail = document.getElementById('loginEmail');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginEmailError = document.getElementById('loginEmailError');
+        const loginPasswordError = document.getElementById('loginPasswordError');
+
+        function validateLoginEmail() {
+            const value = loginEmail.value;
+            const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            if (!isValid && value.length > 0) {
+                loginEmail.classList.add('input-error');
+                loginEmail.classList.remove('input-success');
+                loginEmailError.classList.add('visible');
+            } else {
+                loginEmail.classList.remove('input-error');
+                loginEmail.classList.add('input-success');
+                loginEmailError.classList.remove('visible');
+            }
+            return isValid;
+        }
+
+        function validateLoginPassword() {
+            const value = loginPassword.value;
+            const isValid = value.length >= 6;
+            if (!isValid && value.length > 0) {
+                loginPassword.classList.add('input-error');
+                loginPassword.classList.remove('input-success');
+                loginPasswordError.classList.add('visible');
+            } else {
+                loginPassword.classList.remove('input-error');
+                loginPassword.classList.add('input-success');
+                loginPasswordError.classList.remove('visible');
+            }
+            return isValid;
+        }
+
+        loginEmail.addEventListener('input', validateLoginEmail);
+        loginPassword.addEventListener('input', validateLoginPassword);
+
+        // Validaciones (registro)
+        const regEmail = document.getElementById('regEmail');
+        const regPassword = document.getElementById('regPassword');
+        const confirmar = document.getElementById('confirmar');
+        const regEmailError = document.getElementById('regEmailError');
+        const regPasswordError = document.getElementById('regPasswordError');
+        const confirmError = document.getElementById('confirmError');
+
+        function validateRegEmail() {
+            const value = regEmail.value;
+            const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            if (!isValid && value.length > 0) {
+                regEmail.classList.add('input-error');
+                regEmail.classList.remove('input-success');
+                regEmailError.classList.add('visible');
+            } else {
+                regEmail.classList.remove('input-error');
+                regEmail.classList.add('input-success');
+                regEmailError.classList.remove('visible');
+            }
+            return isValid;
+        }
+
+        function validateRegPassword() {
+            const value = regPassword.value;
+            const isValid = value.length >= 6;
+            if (!isValid && value.length > 0) {
+                regPassword.classList.add('input-error');
+                regPassword.classList.remove('input-success');
+                regPasswordError.classList.add('visible');
+            } else {
+                regPassword.classList.remove('input-error');
+                regPassword.classList.add('input-success');
+                regPasswordError.classList.remove('visible');
+            }
+            return isValid;
+        }
+
+        function validateConfirm() {
+            const value = confirmar.value;
+            const isValid = value === regPassword.value;
+            if (!isValid && value.length > 0) {
+                confirmar.classList.add('input-error');
+                confirmar.classList.remove('input-success');
+                confirmError.classList.add('visible');
+            } else {
+                confirmar.classList.remove('input-error');
+                confirmar.classList.add('input-success');
+                confirmError.classList.remove('visible');
+            }
+            return isValid;
+        }
+
+        regEmail.addEventListener('input', validateRegEmail);
+        regPassword.addEventListener('input', validateRegPassword);
+        confirmar.addEventListener('input', validateConfirm);
+
+        // Recordar sesión
+        const rememberCheck = document.getElementById('rememberMe');
+        window.addEventListener('load', () => {
+            const savedEmail = localStorage.getItem('rememberedEmail');
+            if (savedEmail) {
+                loginEmail.value = savedEmail;
+                rememberCheck.checked = true;
+            }
+        });
+
+        // Login submit
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginEmail.value;
+            const password = loginPassword.value;
+            const result = document.getElementById('resultadoLogin');
+
+            if (!validateLoginEmail() || !validateLoginPassword()) {
+                result.textContent = "❌ Por favor corrige los errores.";
+                result.style.color = "red";
+                return;
+            }
+
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+            const user = usuarios.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                if (rememberCheck.checked) localStorage.setItem('rememberedEmail', email);
+                else localStorage.removeItem('rememberedEmail');
+                localStorage.setItem('session_active', 'true');
+                localStorage.setItem('user_name', user.nombre);
+                result.textContent = "✅ Bienvenido " + user.nombre;
+                result.style.color = "lightgreen";
+                setTimeout(() => window.location.href = "login_mensaje.html", 1000);
+            } else {
+                result.textContent = "❌ Datos incorrectos.";
+                result.style.color = "red";
+            }
+        });
+
+        // Registro submit
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            const email = regEmail.value;
+            const password = regPassword.value;
+            const confirm = confirmar.value;
+            const result = document.getElementById('resultadoRegistro');
+
+            if (!validateRegEmail() || !validateRegPassword() || !validateConfirm()) {
+                result.textContent = "❌ Por favor corrige los errores.";
+                result.style.color = "red";
+                return;
+            }
+            if (password !== confirm) {
+                result.textContent = "⚠️ Las contraseñas no coinciden.";
+                result.style.color = "orange";
+                return;
+            }
+
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+            if (usuarios.some(u => u.email === email)) {
+                result.textContent = "⚠️ Este correo ya está registrado.";
+                result.style.color = "red";
+                return;
+            }
+
+            usuarios.push({ nombre, email, password });
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
+            result.textContent = "✅ Registro exitoso. Ya puedes iniciar sesión.";
+            result.style.color = "lightgreen";
+
+            await enviarCorreoConfirmacion(nombre, email);
+            mostrarToast("¡Registro exitoso! Te hemos enviado un correo de confirmación.", "success");
+        });
+
+        // Modal de recuperación
+        forgotBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            forgotModal.classList.add('active');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            forgotModal.classList.remove('active');
+            document.getElementById('resetEmail').value = '';
+            resetMessage.textContent = '';
+        });
+
+        sendResetBtn.addEventListener('click', () => {
+            const email = document.getElementById('resetEmail').value;
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                resetMessage.textContent = "❌ Correo no válido";
+                resetMessage.style.color = "red";
+                return;
+            }
+            resetMessage.textContent = "✅ Si el correo existe, recibirás instrucciones.";
+            resetMessage.style.color = "lightgreen";
+            setTimeout(() => {
+                forgotModal.classList.remove('active');
+            }, 2000);
+        });
+
+        forgotModal.addEventListener('click', (e) => {
+            if (e.target === forgotModal) forgotModal.classList.remove('active');
+        });
+
+        document.getElementById('showTermsBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert("Términos y condiciones: Al registrarte aceptas nuestra política de privacidad.");
+        });
+    </script>
+</body>
+</html>

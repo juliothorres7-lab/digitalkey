@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar mensaje - Digital Key</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        body {
+            background: linear-gradient(135deg, #0a0f1e 0%, #1a2639 100%);
+            min-height: 100vh;
+        }
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border-left: 4px solid #22d3ee;
+        }
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 16px;
+            z-index: 10;
+        }
+        input, textarea, select {
+            background-color: #f9fafb !important;
+            color: #111827 !important;
+            border-color: #d1d5db !important;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af !important;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #22d3ee !important;
+            outline: none;
+        }
+        label {
+            color: #e2e8f0 !important;
+        }
+        .btn-send {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px 0 rgba(34, 211, 238, 0.2);
+        }
+        .btn-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(34, 211, 238, 0.4);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 grid-bg opacity-20 pointer-events-none"></div>
+        <div class="absolute top-20 right-0 w-[500px] h-[500px] bg-aqua-500 rounded-full mix-blend-screen filter blur-[150px] opacity-10 animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-600 rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 top-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div class="glass rounded-2xl px-6 py-3 flex justify-between items-center">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                    <img src="Imagenes/Digital_Key_Sin_Slogan.png" alt="Digital Key" class="h-10 w-auto object-contain">
+                    <span class="font-display font-bold text-white hidden sm:inline">Digital Key</span>
+                </div>
+                <a href="index.html" class="text-sm text-white/80 hover:text-aqua-400 transition-colors flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al inicio
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex-1 flex items-center justify-center p-4 mt-20 relative z-10">
+        <div class="w-full max-w-md">
+            <div class="glass rounded-3xl p-8 border border-aqua-500/20 shadow-2xl shadow-aqua-500/10">
+                <div class="text-center mb-8">
+                    <img src="Imagenes/Digital_Key.png" alt="Digital Key" class="h-28 mx-auto mb-4 object-contain drop-shadow-2xl hover:scale-105 transition-transform">
+                    <h2 class="font-display text-2xl font-bold text-white">Cuéntanos tu proyecto</h2>
+                    <p class="text-slate-400 text-sm">Completa el formulario y te contactaremos.</p>
+                </div>
+
+                <form id="contactForm" class="space-y-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Nombre completo</label>
+                        <div class="relative">
+                            <i class="fa-regular fa-user input-icon"></i>
+                            <input type="text" id="nombre" class="w-full border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="Tu nombre" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Teléfono</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-phone input-icon"></i>
+                            <input type="tel" id="telefono" class="w-full border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="Tu celular" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Correo electrónico</label>
+                        <div class="relative">
+                            <i class="fa-regular fa-envelope input-icon"></i>
+                            <input type="email" id="correo" class="w-full border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="tu@email.com" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Mensaje</label>
+                        <div class="relative">
+                            <i class="fa-regular fa-message absolute left-3 top-4 text-slate-500"></i>
+                            <textarea id="mensaje" rows="4" class="w-full border border-white/10 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-aqua-500 transition-colors" placeholder="Cuéntanos sobre tu proyecto..." required></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" id="enviarBtn" class="btn-send w-full bg-gradient-to-r from-aqua-500 to-blue-600 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-aqua-500/30 transition-all transform hover:-translate-y-1">
+                        <i class="fa-regular fa-paper-plane mr-2"></i> Enviar mensaje
+                    </button>
+                    <p id="resultado" class="text-sm text-center mt-2"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script>
+        // ========== CONFIGURACIÓN EMAILJS (REEMPLAZA CON TUS DATOS REALES) ==========
+        const EMAILJS_USER_ID = "TU_USER_ID";          // Tu Public Key (User ID) de EmailJS
+        const EMAILJS_SERVICE_ID = "service_xxxxx";     // Tu Service ID
+        const EMAILJS_TEMPLATE_ID = "template_xxxxx";   // Tu Template ID
+
+        // Inicializar EmailJS
+        (function() {
+            emailjs.init(EMAILJS_USER_ID);
+        })();
+
+        function mostrarToast(mensaje, tipo = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.innerHTML = `<i class="fa-solid fa-${tipo === 'success' ? 'circle-check' : 'circle-exclamation'} text-${tipo === 'success' ? 'green' : 'red'}-400"></i> ${mensaje}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        const form = document.getElementById('contactForm');
+        const resultado = document.getElementById('resultado');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+            const mensaje = document.getElementById('mensaje').value.trim();
+
+            if (!nombre || !telefono || !correo || !mensaje) {
+                resultado.textContent = "❌ Por favor completa todos los campos.";
+                resultado.style.color = "red";
+                return;
+            }
+
+            resultado.textContent = "⏳ Enviando mensaje...";
+            resultado.style.color = "#22d3ee";
+
+            const templateParams = {
+                to_name: 'Digital Key',
+                to_email: 'digitalkeyasociados@gmail.com',
+                from_name: nombre,
+                from_email: correo,
+                phone: telefono,
+                message: mensaje,
+                subject: 'Nuevo mensaje de contacto desde la web'
+            };
+
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+                resultado.textContent = "✅ ¡Mensaje enviado con éxito! Te contactaremos pronto.";
+                resultado.style.color = "lightgreen";
+                form.reset();
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+            } catch (error) {
+                console.error('Error de EmailJS:', error);
+                let mensajeError = "❌ Error al enviar el mensaje. ";
+                if (error.text === "The Public Key is invalid. To find this ID, visit https://dashboard.emailjs.com/admin/account") {
+                    mensajeError += "La clave pública de EmailJS es incorrecta. Revisa la configuración.";
+                } else {
+                    mensajeError += "Intenta de nuevo más tarde.";
+                }
+                resultado.textContent = mensajeError;
+                resultado.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

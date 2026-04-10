@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Key - Agencia de Desarrollo Web</title>
+    <meta name="description" content="Digital Key – Agencia de desarrollo web. Creamos ecosistemas digitales de alto rendimiento para negocios en crecimiento.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2322d3ee'/%3E%3Ctext x='50' y='67' font-size='50' text-anchor='middle' fill='white' font-family='monospace'%3EDK%3C/text%3E%3C/svg%3E">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    colors: {
+                        aqua: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            900: '#164e63',
+                            950: '#083344',
+                        },
+                        dark: {
+                            bg: '#020617',
+                            card: '#0f172a',
+                            border: '#1e293b'
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #1e293b 1px, transparent 1px), linear-gradient(to bottom, #1e293b 1px, transparent 1px)",
+                    },
+                    keyframes: {
+                        bounce: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    },
+                    animation: {
+                        bounce: 'bounce 0.6s infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.5);
+        }
+        .grid-bg {
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, 10%, black, 90%, transparent);
+        }
+        .hover-icons {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .group:hover .hover-icons {
+            opacity: 1;
+        }
+        .bounce {
+            animation: bounce 0.6s infinite;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        /* Carrusel */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-slide {
+            flex: 0 0 100%;
+            padding: 0 1rem;
+        }
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .carousel-button:hover {
+            background: rgba(34, 211, 238, 0.8);
+        }
+        .carousel-button.prev {
+            left: 10px;
+        }
+        .carousel-button.next {
+            right: 10px;
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dot.active {
+            background: #22d3ee;
+            transform: scale(1.3);
+        }
+
+        /* Botón flotante de WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            z-index: 100;
+            transition: all 0.3s ease;
+            border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
+            animation: none;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        /* Badge flotante (Chatea) */
+        .whatsapp-badge {
+            position: absolute;
+            top: -8px;
+            right: -5px;
+            background: #ff3b3b;
+            color: white;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            animation: blink 1.5s infinite;
+            z-index: 102;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        /* Tooltip del botón flotante (siempre visible, centrado arriba) */
+        .whatsapp-tooltip {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid #25D366;
+            visibility: visible;
+            opacity: 1;
+            z-index: 101;
+        }
+        /* Toast de notificación (ahora a la izquierda) */
+        .toast-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            border-left: 5px solid #25D366;
+            z-index: 99;
+            transform: translateX(-400px);
+            transition: transform 0.5s ease;
+        }
+        .toast-notification.show {
+            transform: translateX(0);
+        }
+        .toast-notification i {
+            font-size: 24px;
+            color: #25D366;
+        }
+        .toast-notification button {
+            background: none;
+            border: none;
+            color: #25D366;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .toast-notification button:hover {
+            color: white;
+        }
+
+        /* Botón Volver Arriba */
+        .scroll-top {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.2s;
+            z-index: 99;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .scroll-top.visible {
+            opacity: 1;
+        }
+        .scroll-top:hover {
+            background: #22d3ee;
+            transform: scale(1.1);
+        }
+
+        /* Acordeón FAQ */
+        .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .faq-question {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .faq-question:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px; /* suficiente para cualquier respuesta */
+            transition: max-height 0.5s ease-in;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* Animación modal */
+        .animate-fade-up {
+            animation: fade-up 0.3s ease-out forwards;
+        }
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        #cvModal .glass {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-slate-300 font-sans antialiased selection:bg-aqua-500 selection:text-white">
+
+    <!-- Navbar (con ícono de WhatsApp) -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            <div class="glass rounded-2xl px-6 py-3 flex justify-between items-center shadow-2xl shadow-aqua-900/10">
+                
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <img src="Imagenes/Digital_Key_Sin_Slogan.png" 
+                         alt="Digital Key Logo" 
+                         class="h-12 w-auto object-contain"
+                         loading="eager"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <div class="hidden w-10 h-10 bg-gradient-to-br from-aqua-400 to-blue-600 rounded-lg items-center justify-center text-white shadow-lg">
+                        <i class="fa-solid fa-code text-lg"></i>
+                    </div>
+                    <div class="md:hidden">
+                        <h1 class="font-display font-bold text-xl text-white tracking-tight leading-none">Digital Key</h1>
+                        <span class="text-[10px] uppercase tracking-widest text-aqua-400 font-bold">Solutions</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#inicio" class="text-sm font-medium hover:text-white transition-colors">Inicio</a>
+                    <a href="#proyectos" class="text-sm font-medium hover:text-white transition-colors">Proyectos</a>
+                    <a href="#servicios" class="text-sm font-medium hover:text-white transition-colors">Servicios</a>
+                    <a href="#testimonios" class="text-sm font-medium hover:text-white transition-colors">Testimonios</a>
+                    <a href="#equipo" class="text-sm font-medium hover:text-white transition-colors">Equipo</a>
+                    <a href="#faq" class="text-sm font-medium hover:text-white transition-colors">Preguntas</a>
+                    <!-- WhatsApp en navbar -->
+                    <a href="javascript:void(0)" onclick="abrirWhatsApp()" class="relative group flex items-center gap-1 px-3 py-1 bg-green-600/20 border border-green-500/30 rounded-full hover:bg-green-600/30 transition-all" title="Chatea con nosotros">
+                        <i class="fa-brands fa-whatsapp text-green-400 text-xl"></i>
+                        <span class="text-xs text-green-400 hidden lg:inline">WhatsApp</span>
+                        <span class="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-ping"></span>
+                        <span class="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full"></span>
+                    </a>
+                    <a href="#contacto" class="bg-white text-dark-bg px-5 py-2 rounded-lg text-sm font-bold hover:bg-aqua-400 transition-all transform hover:-translate-y-0.5">
+                        Iniciar Proyecto
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Menú">
+                    <i class="fa-solid fa-bars-staggered text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden absolute w-full px-4 mt-2">
+            <div class="glass rounded-xl p-4 space-y-2 flex flex-col">
+                <a href="#inicio" class="block px-4 py-2 rounded-lg hover:bg-white/5 text-white">Inicio</a>
+                <a href="#proyectos" class="block px-4 py-2 rounded-lg hover:bg-white/5 text-white">Proyectos</a>
+                <a href="#servicios" class="block px-4 py-2 rounded-lg hover:bg-white/5 text-white">Servicios</a>
+                <a href="#testimonios" class="block px-4 py-2 rounded-lg hover:bg-white/5 text-white">Testimonios</a>
+                <a href="#equipo" class="block px-4 py-2 rounded-lg hover:bg-white/5 text-white">Equipo</a>
+                <a href="#faq" class="block px-4 py-2 rounded-lg hover:bg-white/5 text-white">Preguntas</a>
+                <a href="#contacto" class="block px-4 py-2 rounded-lg bg-aqua-500 text-white font-bold text-center mt-2">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="inicio" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 bg-grid-pattern grid-bg opacity-20 pointer-events-none"></div>
+        <div class="absolute top-20 right-0 w-[500px] h-[500px] bg-aqua-500 rounded-full mix-blend-screen filter blur-[150px] opacity-10 animate-pulse"></div>
+        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-600 rounded-full mix-blend-screen filter blur-[150px] opacity-10"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div class="flex flex-col items-center text-center">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-aqua-400 text-xs font-bold uppercase tracking-wider mb-8 backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-aqua-400 animate-ping"></span>
+                    Agencia de Desarrollo Web
+                </div>
+                
+                <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-8">
+                    Creamos el futuro <br />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-aqua-400 via-blue-400 to-purple-400 text-glow">digital de tu marca.</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    No solo hacemos páginas web. Construimos ecosistemas digitales de alto rendimiento que convierten visitantes en clientes para negocios en crecimiento.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-5 w-full justify-center">
+                    <a href="#contacto" class="group relative px-8 py-4 bg-aqua-500 text-white font-bold rounded-xl overflow-hidden transition-all hover:scale-105">
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                        <span class="relative flex items-center gap-2">Agendar Consultoría <i class="fa-solid fa-arrow-right"></i></span>
+                    </a>
+                    <a href="#proyectos" class="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-xl hover:bg-white/10 transition-all backdrop-blur-sm">
+                        Ver Portafolio
+                    </a>
+                </div>
+
+                <!-- Tecnologías -->
+                <div class="mt-16 pt-8 border-t border-white/5 w-full max-w-4xl">
+                    <p class="text-sm text-slate-500 mb-6 uppercase tracking-widest">Tecnologías que usamos</p>
+                    <div class="flex flex-wrap justify-center gap-8 md:gap-12 text-slate-400">
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="fa-brands fa-html5 text-4xl hover:text-orange-500 transition-colors"></i>
+                            <span class="text-xs font-medium">HTML5</span>
+                            <span class="text-[10px] text-slate-600">Estructura</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="fa-brands fa-css3-alt text-4xl hover:text-blue-500 transition-colors"></i>
+                            <span class="text-xs font-medium">CSS3</span>
+                            <span class="text-[10px] text-slate-600">Diseño</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="fa-brands fa-js text-4xl hover:text-yellow-400 transition-colors"></i>
+                            <span class="text-xs font-medium">JavaScript</span>
+                            <span class="text-[10px] text-slate-600">Interactividad</span>
+                        </div>
+                        <div class="flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-ellipsis-h text-4xl hover:text-aqua-400 transition-colors"></i>
+                            <span class="text-xs font-medium">y más...</span>
+                            <span class="text-[10px] text-slate-600">Siempre aprendiendo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Carrusel de Proyectos -->
+    <section id="proyectos" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-4">Proyectos <span class="text-aqua-400">recientes</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Dos casos de éxito que combinan diseño, tecnología y resultados.</p>
+            </div>
+
+            <div class="carousel-container" id="carouselContainer">
+                <button class="carousel-button prev" id="carousel-prev" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="carousel-button next" id="carousel-next" aria-label="Siguiente"><i class="fa-solid fa-chevron-right"></i></button>
+                
+                <div class="carousel-track" id="carousel-track">
+                    <!-- Slide 1: Lapcel -->
+                    <div class="carousel-slide" data-url="lapcel/Lapcel.html">
+                        <article class="group relative rounded-3xl overflow-hidden border border-white/10 bg-dark-card shadow-2xl cursor-pointer">
+                            <div class="h-64 md:h-96 bg-gradient-to-b from-slate-800 to-slate-900 overflow-hidden relative">
+                                <img src="Imagenes/Lapcel Logo.jpg" 
+                                     alt="Logo de Lapcel, tienda de tecnología" 
+                                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                     loading="lazy">
+                                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+                                <div class="hover-icons">
+                                    <i class="fa-solid fa-mobile-screen-button text-4xl text-aqua-400 bounce"></i>
+                                    <i class="fa-solid fa-tablet-screen-button text-4xl text-aqua-400 bounce delay-100"></i>
+                                    <i class="fa-solid fa-screwdriver-wrench text-4xl text-aqua-400 bounce delay-200"></i>
+                                </div>
+                            </div>
+                            <div class="p-8">
+                                <h3 class="font-display text-3xl font-bold text-white mb-2">Lapcel</h3>
+                                <p class="text-aqua-400 text-sm font-mono mb-4">E-Commerce • Tecnología</p>
+                                <p class="text-slate-400 leading-relaxed mb-6">Desarrollo de tienda en línea completa para venta de tecnología. Catálogo dinámico, sistema de filtrado y diseño optimizado para conversión.</p>
+                                <div class="inline-block w-full py-3 border border-white/20 rounded-xl text-center text-white hover:bg-white/5 transition-colors pointer-events-none">
+                                    Visitar sitio web
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <!-- Slide 2: La Pupila -->
+                    <div class="carousel-slide" data-url="https://lapupila.com.mx/?fbclid=IwY2xjawQcdkpleHRuA2FlbQIxMABicmlkETFJbHNIeUdYZENwNUNib0RTc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHiZfRAfK5P6XmOxphJ00qCUUY1UT1EOYNo26Z75raSOENxJa8qLUcZRfwY6M_aem_hmkRrnkr4FRhRHIPECLZgw">
+                        <article class="group relative rounded-3xl overflow-hidden border border-white/10 bg-dark-card shadow-2xl cursor-pointer">
+                            <div class="h-64 md:h-96 bg-gradient-to-b from-neutral-800 to-neutral-900 overflow-hidden relative">
+                                <img src="Imagenes/LA-PUPILA-BLANCO.png" 
+                                     alt="Logo de La Pupila, medio deportivo" 
+                                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                     loading="lazy">
+                                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+                                <div class="hover-icons">
+                                    <i class="fa-solid fa-futbol text-5xl text-purple-400 bounce"></i>
+                                    <i class="fa-solid fa-whistle text-4xl text-purple-400 bounce delay-100"></i>
+                                    <i class="fa-solid fa-trophy text-4xl text-purple-400 bounce delay-200"></i>
+                                </div>
+                            </div>
+                            <div class="p-8">
+                                <h3 class="font-display text-3xl font-bold text-white mb-2">La Pupila</h3>
+                                <p class="text-purple-400 text-sm font-mono mb-4">Media • Contenido</p>
+                                <p class="text-slate-400 leading-relaxed mb-6">Plataforma de contenido deportivo de alto tráfico. Optimización de carga, gestión de multimedia y diseño adaptativo para móviles.</p>
+                                <div class="inline-block w-full py-3 border border-white/20 rounded-xl text-center text-white hover:bg-white/5 transition-colors pointer-events-none">
+                                    Visitar sitio web
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="carousel-dots" id="carousel-dots">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section id="servicios" class="py-24 bg-dark-bg relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-6">Nuestra Misión</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">No solo escribimos código. Diseñamos soluciones que resuelven problemas reales de negocio.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 glass p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-laptop-code text-9xl text-aqua-400"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-aqua-500/20 text-aqua-400 rounded-xl flex items-center justify-center text-2xl mb-6">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-4">Desarrollo Web Full-Stack</h3>
+                        <p class="text-slate-400 max-w-md">Desde landing pages de alto impacto hasta sistemas complejos y dashboards administrativos. Utilizamos las tecnologías más modernas para garantizar velocidad y seguridad.</p>
+                    </div>
+                </div>
+                <div class="glass p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center text-2xl mb-6">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-4">E-Commerce</h3>
+                        <p class="text-slate-400">Tiendas que venden solas. Integración de pagos, inventarios y envíos.</p>
+                    </div>
+                </div>
+                <div class="glass p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-green-500/20 text-green-400 rounded-xl flex items-center justify-center text-2xl mb-6">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-4">Diseño UX/UI</h3>
+                        <p class="text-slate-400">Interfaces intuitivas y hermosas diseñadas para retener al usuario.</p>
+                    </div>
+                </div>
+                <div class="md:col-span-2 glass p-8 rounded-3xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-rocket text-9xl text-blue-400"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center text-2xl mb-6">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-4">SEO & Optimización</h3>
+                        <p class="text-slate-400 max-w-md">De nada sirve una web bonita si nadie la ve. Optimizamos tu sitio para que Google lo ame y tus clientes te encuentren rápido.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section id="testimonios" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-4">Lo que dicen <span class="text-aqua-400">nuestros clientes</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Personas y empresas que confiaron en nosotros para llevar su negocio al siguiente nivel.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <!-- Testimonio Lapcel -->
+                <div class="glass p-6 rounded-2xl relative group hover:border-aqua-400/30 transition-all">
+                    <i class="fa-solid fa-quote-left text-3xl text-aqua-400/30 absolute top-4 right-4"></i>
+                    <p class="text-slate-300 mb-4 italic">"Digital Key desarrolló nuestra tienda online con un nivel de detalle impresionante. El catálogo dinámico y el sistema de filtros han mejorado nuestras ventas notablemente. Totalmente profesionales."</p>
+                    <div class="mt-4">
+                        <p class="font-bold text-white">Juan Carlos López</p>
+                        <p class="text-sm text-slate-500">Gerente de Lapcel</p>
+                    </div>
+                </div>
+
+                <!-- Testimonio La Pupila -->
+                <div class="glass p-6 rounded-2xl relative group hover:border-purple-400/30 transition-all">
+                    <i class="fa-solid fa-quote-left text-3xl text-purple-400/30 absolute top-4 right-4"></i>
+                    <p class="text-slate-300 mb-4 italic">"La plataforma de contenido que crearon para La Pupila es rapidísima y se ve perfecta en móviles. Nuestros lectores están encantados y el tráfico no ha dejado de crecer."</p>
+                    <div class="mt-4">
+                        <p class="font-bold text-white">Roberto Méndez</p>
+                        <p class="text-sm text-slate-500">Director de La Pupila</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="login.html" class="inline-flex items-center gap-2 text-aqua-400 hover:text-white transition-colors">
+                    <i class="fa-regular fa-comment"></i> ¿Quieres dejar tu comentario? Inicia sesión
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipo (con botón "Más información") -->
+    <section id="equipo" class="py-24 bg-dark-bg/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-4">Nuestro <span class="text-aqua-400">equipo</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Detrás de cada gran proyecto hay un gran equipo. Conoce a los creadores de Digital Key.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Ángel -->
+                <div class="glass rounded-2xl p-6 text-center group hover:border-aqua-400/30 transition-all cursor-pointer" data-member="0">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 border-2 border-aqua-400/50 group-hover:border-aqua-400 transition-all">
+                        <img src="Imagenes/Angel_Foto.jpg" alt="Foto de Ángel Reyna" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/0f172a/22d3ee?text=AR'">
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white">Ángel Ramón Reyna Medina</h3>
+                    <p class="text-aqua-400 text-sm mb-2">Líder y creador</p>
+                    <p class="text-xs text-slate-500">Visión y estrategia</p>
+                    <button onclick="abrirModal(0)" class="mt-3 text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-full transition-all">Más información</button>
+                </div>
+                <!-- Kenia -->
+                <div class="glass rounded-2xl p-6 text-center group hover:border-purple-400/30 transition-all cursor-pointer" data-member="1">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 border-2 border-purple-400/50 group-hover:border-purple-400 transition-all">
+                        <img src="Imagenes/Kenia_Foto.jpg" alt="Foto de Kenia Miranda" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/0f172a/a855f7?text=KM'">
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white">Kenia Ebethzali Miranda Plata</h3>
+                    <p class="text-purple-400 text-sm mb-2">Diseñadora UX/UI</p>
+                    <p class="text-xs text-slate-500">Experiencia de usuario y creatividad</p>
+                    <button onclick="abrirModal(1)" class="mt-3 text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-full transition-all">Más información</button>
+                </div>
+                <!-- Rafael -->
+                <div class="glass rounded-2xl p-6 text-center group hover:border-green-400/30 transition-all cursor-pointer" data-member="2">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 border-2 border-green-400/50 group-hover:border-green-400 transition-all">
+                        <img src="Imagenes/Rafa_Foto.jpg" alt="Foto de Rafael Barrientos" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/0f172a/22c55e?text=RB'">
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white">Rafael Barrientos Grimaldo</h3>
+                    <p class="text-green-400 text-sm mb-2">Desarrollador Backend</p>
+                    <p class="text-xs text-slate-500">Arquitectura y bases de datos</p>
+                    <button onclick="abrirModal(2)" class="mt-3 text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-full transition-all">Más información</button>
+                </div>
+                <!-- Julio -->
+                <div class="glass rounded-2xl p-6 text-center group hover:border-blue-400/30 transition-all cursor-pointer" data-member="3">
+                    <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 border-2 border-blue-400/50 group-hover:border-blue-400 transition-all">
+                        <img src="Imagenes/Julio_Foto.jpg" alt="Foto de Julio Ramírez" class="w-full h-full object-cover" loading="lazy" onerror="this.onerror=null; this.src='https://via.placeholder.com/150/0f172a/3b82f6?text=JR'">
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white">Julio Alberto Ramírez Torres</h3>
+                    <p class="text-blue-400 text-sm mb-2">Desarrollador Frontend</p>
+                    <p class="text-xs text-slate-500">Interfaces y experiencia visual</p>
+                    <button onclick="abrirModal(3)" class="mt-3 text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded-full transition-all">Más información</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto (bloqueado, solo botón a login) -->
+    <section id="contacto" class="relative py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-6">Iniciemos algo <br><span class="text-aqua-400">extraordinario.</span></h2>
+                    <p class="text-slate-400 text-lg mb-10 leading-relaxed">
+                        ¿Tienes una idea en mente? Ya sea una tienda online, una página corporativa o una app web, estamos listos para escuchar.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-aqua-400 group-hover:bg-aqua-500 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-bold uppercase">Correo Electrónico</p>
+                                <a href="mailto:digitalkeyasociados@gmail.com" class="text-white text-lg font-medium hover:text-aqua-400 transition-colors">digitalkeyasociados@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-all">
+                                <i class="fa-brands fa-whatsapp text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-bold uppercase">WhatsApp Directo</p>
+                                <a href="javascript:void(0)" onclick="abrirWhatsApp()" class="text-white text-lg font-medium hover:text-green-400 transition-colors cursor-pointer">464 197 7737</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-all">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-bold uppercase">Ubicación</p>
+                                <p class="text-white text-lg font-medium">Salamanca, Gto. (Atención Remota Global)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass p-8 md:p-10 rounded-3xl relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-aqua-500 to-blue-600 rounded-3xl blur opacity-20 -z-10"></div>
+                    <div class="space-y-6 text-center">
+                        <div class="text-slate-300">
+                            <i class="fa-regular fa-envelope text-5xl mb-4 block"></i>
+                            <p class="mb-4">Para contactarnos, primero debes registrarte en nuestro sistema.</p>
+                        </div>
+                        <a href="login.html" class="inline-block bg-gradient-to-r from-aqua-500 to-blue-600 text-white font-bold py-4 px-8 rounded-xl hover:shadow-lg hover:shadow-aqua-500/30 transition-all transform hover:-translate-y-1">
+                            Regístrate
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preguntas Frecuentes (FAQ) -->
+    <section id="faq" class="py-24 bg-dark-bg/30">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-display text-3xl md:text-5xl font-bold text-white mb-4">Preguntas <span class="text-aqua-400">frecuentes</span></h2>
+                <p class="text-slate-400">Resolvemos tus dudas sobre nuestro proceso y servicios.</p>
+            </div>
+            <div class="space-y-2" id="faqContainer">
+                <!-- Generado dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-dark-bg pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center justify-center text-center">
+                <div class="mb-8">
+                    <img src="Imagenes/Digital_Key.png" 
+                         alt="Digital Key Logo" 
+                         class="h-32 w-auto object-contain mx-auto"
+                         loading="lazy"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    <div class="hidden w-32 h-32 bg-gradient-to-br from-aqua-400 to-blue-600 rounded-2xl items-center justify-center text-white text-5xl shadow-lg mx-auto">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                </div>
+                <h2 class="font-display text-3xl font-bold text-white mb-4">Digital Key</h2>
+                <p class="text-slate-500 max-w-md mb-8 text-lg">Transformando ideas en experiencias digitales excepcionales para negocios que buscan crecer.</p>
+                <div class="flex gap-6 mb-12">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-aqua-500 hover:text-white transition-all" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/_digital_key_?igsh=MXdwaXdzZWw5a3ZwOA==" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-aqua-500 hover:text-white transition-all" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="javascript:void(0)" onclick="abrirWhatsApp()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-slate-400 hover:bg-green-500 hover:text-white transition-all" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+                <div class="w-full h-px bg-white/5 mb-8"></div>
+                <p class="text-slate-600 text-sm">© 2025 Digital Key. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Botón flotante de WhatsApp -->
+    <div class="whatsapp-float" onclick="abrirWhatsApp()" aria-label="Abrir WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="whatsapp-badge">Chatea</span>
+        <span class="whatsapp-tooltip">¡Hablemos! 👋</span>
+    </div>
+
+    <!-- Botón Volver Arriba -->
+    <div id="scrollTopBtn" class="scroll-top" aria-label="Volver arriba">
+        <i class="fa-solid fa-arrow-up"></i>
+    </div>
+
+    <!-- Toast de notificación (permanente) -->
+    <div id="whatsapp-toast" class="toast-notification">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span>¿Necesitas ayuda? <strong>Chatea por WhatsApp</strong></span>
+        <button onclick="abrirWhatsApp()">Abrir chat</button>
+    </div>
+
+    <!-- Modal de CV -->
+    <div id="cvModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all duration-300">
+        <div class="glass rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-white/20 p-6 md:p-8 relative animate-fade-up">
+            <button id="closeModalBtn" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center justify-center" aria-label="Cerrar">
+                <i class="fa-solid fa-times"></i>
+            </button>
+
+            <div class="flex flex-col md:flex-row gap-6 items-center md:items-start">
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-aqua-500/50 flex-shrink-0">
+                    <img id="modalFoto" src="" alt="Foto del miembro" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                    <h3 id="modalNombre" class="font-display text-2xl md:text-3xl font-bold text-white mb-1"></h3>
+                    <p id="modalRol" class="text-aqua-400 text-sm font-semibold mb-4"></p>
+                    <div id="modalDescripcion" class="text-slate-300 text-sm leading-relaxed space-y-3"></div>
+                    <div id="modalHabilidades" class="mt-6 flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="apis.js"></script>
+    <script>
+        // Datos de los miembros del equipo (CVs completos)
+        const miembros = [
+            {
+                nombre: "Ángel Ramón Reyna Medina",
+                rol: "Líder y Creador | Visión, Estrategia y Coordinación Técnica",
+                foto: "Imagenes/Angel_Foto.jpg",
+                descripcion: "Emprendedor tecnológico con visión estratégica para digitalizar pequeños y medianos negocios. Fundador de Digital Key, donde lidera la planeación, coordinación y ejecución de proyectos integrales de transformación digital. Combina su enfoque en el modelo de negocio con una comprensión sólida de las tecnologías involucradas (frontend, backend, bases de datos), lo que le permite supervisar el desarrollo, alinear los esfuerzos del equipo y garantizar que cada solución sea viable, escalable y realmente adaptada a las necesidades del cliente. Especialista en gestión de relaciones con clientes clave como Lapcel y medios de comunicación deportiva, así como en la definición de estrategias comerciales sostenibles.",
+                habilidades: ["Liderazgo de proyectos", "Estrategia comercial", "Análisis de necesidades", "Gestión de clientes", "Innovación tecnológica", "Desarrollo web y BD", "Comunicación efectiva"]
+            },
+            {
+                nombre: "Kenia Ebethzali Miranda Plata",
+                rol: "Diseñadora UX/UI | Experiencia de Usuario y Creatividad",
+                foto: "Imagenes/Kenia_Foto.jpg",
+                descripcion: "Diseñadora apasionada por crear interfaces intuitivas y experiencias digitales memorables. En Digital Key, es responsable de traducir las necesidades de los clientes en diseños visuales atractivos y funcionales, asegurando que cada página web y catálogo digital sea fácil de usar incluso para usuarios sin experiencia técnica. Su trabajo combina principios de usabilidad con una estética moderna, utilizando los colores aqua y negro que definen la identidad visual de la marca. Participa activamente en la creación de materiales gráficos como tarjetas, trípticos y publicidad.",
+                habilidades: ["Diseño UX/UI", "Wireframing", "Prototipado", "Herramientas de diseño gráfico", "Creatividad visual", "Empatía con el usuario"]
+            },
+            {
+                nombre: "Rafael Barrientos Grimaldo",
+                rol: "Desarrollador Backend | Arquitectura y Bases de Datos",
+                foto: "Imagenes/Rafa_Foto.jpg",
+                descripcion: "Ingeniero de software especializado en construir sistemas robustos, seguros y escalables. En Digital Key, es el responsable de la arquitectura del backend, el diseño de bases de datos relacionales y la implementación de paneles de administración autogestionables (CRUD). Ha desarrollado la infraestructura que permite a clientes como Lapcel gestionar sus productos y reservas de forma autónoma, aplicando medidas de seguridad como cifrado de contraseñas (bcrypt), consultas parametrizadas y conexiones SSL. Su trabajo garantiza que los datos estén protegidos y que el sistema funcione sin interrupciones.",
+                habilidades: ["PHP", "MySQL", "PDO", "Arquitectura de software", "Seguridad informática", "Gestión de servidores (Neubox)", "APIs"]
+            },
+            {
+                nombre: "Julio Alberto Ramírez Torres",
+                rol: "Desarrollador Frontend | Interfaces y Experiencia Visual",
+                foto: "Imagenes/Julio_Foto.jpg",
+                descripcion: "Desarrollador frontend con enfoque en crear experiencias digitales fluidas, responsivas y visualmente impactantes. En Digital Key, transforma los diseños de UX/UI en código limpio y funcional utilizando HTML5, CSS3 y JavaScript. Se especializa en optimizar la experiencia del usuario final, asegurando que las páginas web carguen rápidamente, se vean correctamente en diferentes dispositivos y ofrezcan interacciones intuitivas (como botones de reserva, formularios dinámicos y catálogos interactivos). Su trabajo da vida a la identidad visual de la marca y garantiza que cada proyecto sea accesible para todo tipo de usuarios.",
+                habilidades: ["HTML5", "CSS3", "JavaScript", "Diseño responsivo", "Optimización de rendimiento", "Integración con backend", "Control de versiones (Git)"]
+            }
+        ];
+
+        // FAQ: preguntas y respuestas
+        const faqItems = [
+            { q: "¿Qué es Digital Key?", a: "Digital Key es una empresa de soluciones digitales que ayuda a pequeños y medianos negocios a tener presencia en internet. No solo creamos páginas web y catálogos digitales, sino que te acompañamos en todo el proceso para que no te sientas solo frente a la tecnología." },
+            { q: "¿Qué servicios ofrecen?", a: "Ofrecemos: páginas web para computadora (y adaptables a móvil); catálogos digitales; paneles de administración autogestionables; soporte técnico por WhatsApp; copias de seguridad automáticas." },
+            { q: "¿Necesito saber programar para tener una página con ustedes?", a: "No. Nosotros nos encargamos de toda la parte técnica. Tú solo nos compartes la información de tu negocio (productos, fotos, horarios, etc.) y nosotros hacemos el resto." },
+            { q: "¿Puedo actualizar mi página yo mismo después?", a: "Sí. Dependiendo de lo que acordemos, podemos incluir un panel de administración sencillo donde tú mismo puedes agregar/quitar productos, modificar precios, ver reservas, subir fotos. Si prefieres no hacerlo, también podemos encargarnos nosotros de las actualizaciones." },
+            { q: "¿Qué incluye el soporte por WhatsApp?", a: "El soporte por WhatsApp es una línea directa con nosotros. Nos escribes cuando tengas una duda o necesites ayuda con tu página, y te respondemos en un tiempo acordado. Es parte de nuestro compromiso de acompañarte más allá de la entrega del sitio." },
+            { q: "¿Qué son las copias de seguridad y por qué son importantes?", a: "Las copias de seguridad son un respaldo de toda la información de tu página (productos, reservas, etc.) que guardamos automáticamente. Si algo llegara a fallar, podemos recuperar tu información sin pérdidas. Es como un seguro para tu negocio digital." },
+            { q: "¿Mi página se verá bien en teléfonos?", a: "Aunque nuestro enfoque principal es que se vea muy bien en computadora, desarrollamos las páginas para que también se vean correctamente en teléfonos y tabletas. Queremos que tus clientes puedan verte desde cualquier dispositivo." },
+            { q: "¿Cómo empiezo a trabajar con ustedes?", a: "El proceso es sencillo: 1) Contactas con nosotros por WhatsApp o correo. 2) Agendamos una reunión para conocer tu negocio. 3) Te enviamos una propuesta. 4) Comenzamos a trabajar juntos. 5) Revisas el avance. 6) Lanzamos tu página al internet y comenzamos el acompañamiento." },
+            { q: "¿Puedo ver ejemplos de su trabajo?", a: "Sí. Actualmente estamos desarrollando la página de Lapcel, un negocio de celulares y computadoras con tres sucursales. También estamos trabajando con La PUPILA, un medio de periodismo deportivo (puedes visitar su sitio actual en https://lapupila.com.mx/). Pronto tendremos una sección de casos de éxito en nuestra página." },
+            { q: "¿Qué pasa si en el futuro quiero agregar más funciones?", a: "Claro que puedes. A medida que tu negocio crezca, podemos sumar nuevas funcionalidades: más secciones en tu página, un sistema de reservas más avanzado, un catálogo más grande, etc. Lo conversamos y te hacemos una propuesta adicional." }
+        ];
+
+        // Generar FAQ dinámicamente
+        const faqContainer = document.getElementById('faqContainer');
+        if (faqContainer) {
+            faqItems.forEach((item, idx) => {
+                const faqDiv = document.createElement('div');
+                faqDiv.className = 'faq-item border-b border-white/10';
+                faqDiv.innerHTML = `
+                    <div class="faq-question flex justify-between items-center py-4 px-2 group" data-idx="${idx}">
+                        <span class="text-white font-medium">${item.q}</span>
+                        <i class="fa-solid fa-chevron-down text-slate-400 transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-2 pb-4 text-slate-400 text-sm leading-relaxed">
+                        ${item.a}
+                    </div>
+                `;
+                faqContainer.appendChild(faqDiv);
+            });
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.addEventListener('click', () => {
+                    const parent = q.closest('.faq-item');
+                    parent.classList.toggle('active');
+                });
+            });
+        }
+
+        // Modal CV
+        const modal = document.getElementById('cvModal');
+        const modalFoto = document.getElementById('modalFoto');
+        const modalNombre = document.getElementById('modalNombre');
+        const modalRol = document.getElementById('modalRol');
+        const modalDescripcion = document.getElementById('modalDescripcion');
+        const modalHabilidades = document.getElementById('modalHabilidades');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        window.abrirModal = function(index) {
+            const m = miembros[index];
+            modalFoto.src = m.foto;
+            modalFoto.onerror = function() { this.src = 'https://via.placeholder.com/150/0f172a/22d3ee?text=' + m.nombre.charAt(0); };
+            modalNombre.innerText = m.nombre;
+            modalRol.innerText = m.rol;
+            modalDescripcion.innerHTML = `<p class="mb-3">${m.descripcion}</p>`;
+            modalHabilidades.innerHTML = m.habilidades.map(h => `<span class="px-3 py-1 bg-white/10 rounded-full text-xs font-medium text-brand-300">${h}</span>`).join('');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        function cerrarModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        }
+
+        closeModalBtn.addEventListener('click', cerrarModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) cerrarModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('flex')) {
+                cerrarModal();
+            }
+        });
+
+        // Carrusel auto-play y click en toda la tarjeta
+        const track = document.getElementById('carousel-track');
+        const prevBtn = document.getElementById('carousel-prev');
+        const nextBtn = document.getElementById('carousel-next');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        const totalSlides = document.querySelectorAll('.carousel-slide').length;
+        let autoPlayInterval;
+        const container = document.getElementById('carouselContainer');
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function startAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+        }
+
+        startAutoPlay();
+        container.addEventListener('mouseenter', stopAutoPlay);
+        container.addEventListener('mouseleave', startAutoPlay);
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            stopAutoPlay();
+            startAutoPlay();
+        });
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            stopAutoPlay();
+            startAutoPlay();
+        });
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentIndex = index;
+                updateCarousel();
+                stopAutoPlay();
+                startAutoPlay();
+            });
+        });
+
+        const slides = document.querySelectorAll('.carousel-slide');
+        slides.forEach(slide => {
+            const url = slide.getAttribute('data-url');
+            if (url) {
+                const article = slide.querySelector('article');
+                article.style.cursor = 'pointer';
+                article.addEventListener('click', (e) => {
+                    window.location.href = url;
+                });
+            }
+        });
+
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Toast de WhatsApp
+        setTimeout(() => {
+            const toast = document.getElementById('whatsapp-toast');
+            toast.classList.add('show');
+        }, 1000);
+    </script>
+</body>
+</html>
